@@ -1,0 +1,19 @@
+{
+  "name": "Music_ranking_crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Music_ranking_crawler.js",
+  "scripts": {
+    "start": "node Music_ranking_crawler.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cadenzah",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "exceljs": "^1.9.0",
+    "iconv": "^2.3.4",
+    "request": "^2.88.0",
+    "xlsx": "^0.14.2"
+  }
+}

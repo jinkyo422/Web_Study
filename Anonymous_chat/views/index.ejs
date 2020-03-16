@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+        <h2>익명 채팅</h2>
+        <p>바르고 고운말</p>
+        <form action="/data" method="post" id="msg-form">
+            <fieldset>
+                <legend>메세지 보내기</legend>
+                닉네임: <input type="text" value=<%= parseInt(Math.random()*100000000).toString(16) %> placeholder="닉네임을 입력하세요" name="userId" id="userId"/> <br />
+                <input type="text" placeholder="메세지를 입력하세요" name="msg" id="msg" style="width: 250px;"/> <button type="submit">전송</button>
+            </fieldset>
+        </form>
+        <div id="chat-content">
+            <% if(typeof msg == 'string') {%>
+                <p><%= msg %></p>
+            <% } else { %>
+                <% for(var i = 0; i<msg.length; i++) {%>
+                    <p><%= msg[i].userId %>:[<%= msg[i].date.toLocaleString() %>] <%= msg[i].msg %></p>
+                <% } %>
+            <% } %>
+        </div>
+        <script text="text/javascript">
+            function checker(){
+                const idElement = document.getElementById("userId").value
+                const msgElement = document.getElementById("msg").value
+                if(idElement === "" || idElement === undefined){
+                    alert("닉네임을 입력해주세요!")
+                    return false
+                }
+                else if(msgElement === "" || msgElement === undefined){
+                    alert("메세지를 입력해주세요!")
+                    return false
+                }
+                else if(msgElement.length > 30){
+                    alert("30자 이내로 메세지를 입력해주세요!")
+                    return false
+                }
+
+                const fieldsets = formElement.getElementsByTagName("input")
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', '/data')
+                xhr.setRequestHeader('Content-type', 'application/json')
+                xhr.onload = function() {
+                    if (xhr.status == 200){
+                        const msg = JSON.parse(xhr.responseText).msg
+                        const chatContent = document.getElementById('chat-content')
+                        chatContent.innerHTML = ""
+
+                        for(let i = msg.length-1; i>=0; i--){
+                            const msgString = msg[i].userId + ':[' + msg[i].date.toLocaleString() +
+                            ']' + msg[i].msg
+                            const newMsg = document.createElement('p')
+                            newMsg.innerHTML = msgString
+                            chatContent.appendChild(newMsg)
+                        }
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    userId : fieldsets.userId.value,
+                    msg : fieldsets.msg.value
+                }))
+
+                return false
+            }
+            const formElement = document.getElementById("msg-form")
+            formElement.setAttribute('onsubmit', 'return checker()')
+        </script>
+    </body>
+</html>
